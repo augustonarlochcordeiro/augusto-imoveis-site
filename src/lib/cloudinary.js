@@ -17,16 +17,22 @@ export function getCloudinaryUrl(sanityImageUrl, width = 1200, height = 800) {
 }
 
 /**
- * NOVA FUNÇÃO: Aplica a marca d'água mantendo as dimensões originais (sem cortes).
+ * Aplica a marca d'água proporcional (10% da largura) 
+ * mantendo as dimensões originais da foto sem cortes.
  */
 export function getWatermarkedOriginalUrl(sanityImageUrl) {
   if (!sanityImageUrl) return "";
 
   const logoName = "logo_marca_ghcyb9"; 
-  const watermark = `l_${logoName},o_20,w_400,g_center`;
+  
+  // w_0.1 = 10% da largura da foto original
+  // fl_relative = diz ao Cloudinary para usar a foto base como referência de tamanho
+  // g_center = centraliza a marca
+  const watermark = `l_${logoName},o_20,w_0.1,fl_relative,g_center`;
 
-  // Parâmetros apenas com otimização (f_auto, q_auto) e marca d'água, sem w, h ou c_fill
-  const params = `f_auto,q_auto/${watermark}`;
+  // Usamos c_limit com um valor alto para garantir que o Cloudinary processe a imagem 
+  // e aplique a camada da logo sem redimensionar ou cortar a foto original.
+  const params = `f_auto,q_auto,c_limit,w_5000,h_5000/${watermark}`;
   
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/${params}/${encodeURIComponent(sanityImageUrl)}`;
 }
