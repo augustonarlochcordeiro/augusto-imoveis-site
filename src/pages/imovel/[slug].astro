@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import { sanityClient } from 'sanity:client';
 import { propertyBySlugQuery } from '../../lib/queries';
-import { getCloudinaryUrl } from '../../lib/cloudinary';
+import { getCloudinaryUrl, getWatermarkedOriginalUrl } from '../../lib/cloudinary';
 import { urlFor } from '../../lib/image';
 
 export async function getStaticPaths() {
@@ -32,8 +32,8 @@ const mainRawUrl = imovel.mainImage?.asset?.url || urlFor(imovel.mainImage).url(
 const mainWidth = imovel.mainImage?.asset?.metadata?.dimensions?.width || 1920;
 const mainHeight = imovel.mainImage?.asset?.metadata?.dimensions?.height || 1080;
 
-const mainOptimized = getCloudinaryUrl(mainRawUrl, 1200, 800);
-const mainFullSize = getCloudinaryUrl(mainRawUrl, 1920, 1080);
+const mainOptimized = getCloudinaryUrl(mainRawUrl, 1200, 800); // Moldura (cortada)
+const mainWatermarked = getWatermarkedOriginalUrl(mainRawUrl); // Zoom (original com marca)
 
 const tipoFisico = imovel.propertyType ? imovel.propertyType : 'Imóvel';
 
@@ -75,7 +75,7 @@ const schemaGoogle = {
       <section class="editorial-gallery" id="property-gallery">
         <div class="mosaic-grid">
           
-          <a href={mainRawUrl} data-pswp-width={mainWidth} data-pswp-height={mainHeight} class="main-frame">
+          <a href={mainWatermarked} data-pswp-width={mainWidth} data-pswp-height={mainHeight} class="main-frame">
             <img src={mainOptimized} alt={imovel.title} loading="eager" />
             <div class="image-gradient-overlay"></div>
             <div class="gallery-badges">
@@ -95,7 +95,7 @@ const schemaGoogle = {
               const height = img.asset?.metadata?.dimensions?.height || 1080;
               
               return (
-                <a href={rawUrl} data-pswp-width={width} data-pswp-height={height} class="side-item">
+                <a href={getWatermarkedOriginalUrl(rawUrl)} data-pswp-width={width} data-pswp-height={height} class="side-item">
                   <img src={getCloudinaryUrl(rawUrl, 600, 400)} alt="Detalhes do imóvel" />
                   <div class="image-gradient-overlay"></div>
                 </a>
@@ -110,7 +110,7 @@ const schemaGoogle = {
           const height = img.asset?.metadata?.dimensions?.height || 1080;
           
           return (
-            <a href={rawUrl} data-pswp-width={width} data-pswp-height={height} class="hidden-pswp"></a>
+            <a href={getWatermarkedOriginalUrl(rawUrl)} data-pswp-width={width} data-pswp-height={height} class="hidden-pswp"></a>
           );
         })}
       </section>
