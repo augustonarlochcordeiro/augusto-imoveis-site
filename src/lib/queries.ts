@@ -15,15 +15,15 @@ export const allPropertiesQuery = `
     neighborhood,
     bedrooms,
     bathrooms,
-    priceVenda,    // ADICIONE ESTA LINHA
-    priceAluguel,  // ADICIONE ESTA LINHA
-    suites,          // <- Adicionado
+    priceVenda,
+    priceAluguel,
+    suites,
     area,
-    amenities,       // <- Adicionado
+    amenities,
     parkingSlots,
     propertyType,
     status,
-    featured,        // <- Importante para separar os destaques na Home
+    featured,
     mainImage
   }
 `;
@@ -39,14 +39,20 @@ export const propertyBySlugQuery = `
     neighborhood,
     bedrooms,
     bathrooms,
-    suites,          // <- Adicionado
+    suites,
     parkingSlots,
     description,
-    mainImage,
-    gallery,
+    mainImage {
+      ...,
+      asset->
+    },
+    gallery[] {
+      ...,
+      asset->
+    },
     status,
     area,
-    amenities,       // <- Adicionado
+    amenities,
     propertyType
   }
 `;

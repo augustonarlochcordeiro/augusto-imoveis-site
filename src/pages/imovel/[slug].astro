@@ -28,7 +28,10 @@ const isVenda = statusArray.includes('venda');
 const isAluguel = statusArray.includes('aluguel') || statusArray.includes('locação');
 const isIndisponivel = statusArray.includes('vendido') || statusArray.includes('alugado');
 
-const mainRawUrl = urlFor(imovel.mainImage).url();
+const mainRawUrl = imovel.mainImage?.asset?.url || urlFor(imovel.mainImage).url();
+const mainWidth = imovel.mainImage?.asset?.metadata?.dimensions?.width || 1920;
+const mainHeight = imovel.mainImage?.asset?.metadata?.dimensions?.height || 1080;
+
 const mainOptimized = getCloudinaryUrl(mainRawUrl, 1200, 800);
 const mainFullSize = getCloudinaryUrl(mainRawUrl, 1920, 1080);
 
@@ -72,7 +75,7 @@ const schemaGoogle = {
       <section class="editorial-gallery" id="property-gallery">
         <div class="mosaic-grid">
           
-          <a href={mainRawUrl} class="main-frame">
+          <a href={mainRawUrl} data-pswp-width={mainWidth} data-pswp-height={mainHeight} class="main-frame">
             <img src={mainOptimized} alt={imovel.title} loading="eager" />
             <div class="image-gradient-overlay"></div>
             <div class="gallery-badges">
@@ -87,9 +90,12 @@ const schemaGoogle = {
 
           <div class="side-frames">
             {imovel.gallery?.slice(0, 2).map((img) => {
-              const rawUrl = urlFor(img).url();
+              const rawUrl = img.asset?.url || urlFor(img).url();
+              const width = img.asset?.metadata?.dimensions?.width || 1920;
+              const height = img.asset?.metadata?.dimensions?.height || 1080;
+              
               return (
-                <a href={getCloudinaryUrl(rawUrl, 1920, 1080)} data-pswp-width="1920" data-pswp-height="1080" class="side-item">
+                <a href={rawUrl} data-pswp-width={width} data-pswp-height={height} class="side-item">
                   <img src={getCloudinaryUrl(rawUrl, 600, 400)} alt="Detalhes do imóvel" />
                   <div class="image-gradient-overlay"></div>
                 </a>
@@ -99,9 +105,12 @@ const schemaGoogle = {
         </div>
 
         {imovel.gallery?.slice(2).map((img) => {
-          const rawUrl = urlFor(img).url();
+          const rawUrl = img.asset?.url || urlFor(img).url();
+          const width = img.asset?.metadata?.dimensions?.width || 1920;
+          const height = img.asset?.metadata?.dimensions?.height || 1080;
+          
           return (
-            <a href={getCloudinaryUrl(rawUrl, 1920, 1080)} data-pswp-width="1920" data-pswp-height="1080" class="hidden-pswp"></a>
+            <a href={rawUrl} data-pswp-width={width} data-pswp-height={height} class="hidden-pswp"></a>
           );
         })}
       </section>
