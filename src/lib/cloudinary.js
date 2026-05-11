@@ -28,7 +28,7 @@ export function getWatermarkedOriginalUrl(sanityImageUrl) {
   // Passo 1: l_{logoName} (Chama a imagem da logo)
   // Passo 2: c_scale,w_0.1,fl_relative (Escala a logo para 10% da imagem base)
   // Passo 3: fl_layer_apply,g_center,o_20 (Aplica a camada no centro com 20% de opacidade)
-  const params = `f_auto,q_auto/l_${logoName}/c_scale,w_0.5,fl_relative/fl_layer_apply,g_center,o_50`;
+  const params = `f_auto,q_auto/l_${logoName}/c_scale,w_0.25,fl_relative/fl_layer_apply,g_center,o_50`;
   
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/${params}/${encodeURIComponent(sanityImageUrl)}`;
 }
